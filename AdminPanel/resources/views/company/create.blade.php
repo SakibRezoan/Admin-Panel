@@ -8,7 +8,17 @@
         <div class="col-md-8 col-md-offset-2">
             
             <div class="panel panel-default">
-            	<div class="panle-heading" style="padding-left: 20px"><h2>Add Company Information</h2></div>
+            	<div class="panle-heading" style="padding-left: 20px"><h2>Add Company Information</h2>
+            	</div>
+            	@if ($errors->any())
+				    <div class="alert alert-danger">
+				        <ul>
+				            @foreach ($errors->all() as $error)
+				                <li>{{ $error }}</li>
+				            @endforeach
+				        </ul>
+				    </div>
+				@endif
             	<div class="panle-body" style="padding: 20px">
             		
             		<form action="{{route('company.submit')}}" method="POST" enctype="multipart/form-data">
@@ -53,6 +63,10 @@
 					    <textarea class="form-control" id="address" name="address" rows="3"></textarea>
 					  </div>
 					  <div class="form-group">
+						    <label for="name">Company URL</label>
+						    <input type="text" class="form-control" id="website" name="website" placeholder="Enter Company Website">
+					  	</div>
+					  <div class="form-group">
 					    <label for="logo">Company Logo</label>
 					    <input type="file" class="form-control-file" id="logo" name="logo">
 					  </div>
@@ -60,7 +74,7 @@
 					    <legend>Company Type</legend>
 					    <div class="form-check">
 					      <label class="form-check-label">
-					        <input type="radio" class="form-check-input" name="type" id="nonGovernment" value="nonGovernment" checked>
+					        <input type="radio" class="form-check-input" name="type" id="nonGovernment" value="Non Government" checked>
 					        Non Government
 					      </label>
 					    </div>
@@ -72,15 +86,15 @@
 					    </div>
 					    <div class="form-check">
 					      <label class="form-check-label">
-					        <input type="radio" class="form-check-input" name="type" id="semiGovernment" value="semiGovernment">
+					        <input type="radio" class="form-check-input" name="type" id="semiGovernment" value="Semi Government">
 					        Semi Government
 					      </label>
 					    </div> 
 					  </fieldset>
 					  <br>
 					  <div class="form-check">
-					    <label class="form-check-label">
-					      <input type="checkbox" class="form-check-input" name="Licensed">
+					    <label for ="license" class="form-check-label">
+					      <input type="checkbox" class="form-check-input" name="license" value=TRUE>
 					      Licensed Company
 					    </label>
 					  </div>
