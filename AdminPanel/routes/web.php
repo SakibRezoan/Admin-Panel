@@ -22,3 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/companies', 'CompanyController@index')->name('companies');
 Route::get('/company/create', 'CompanyController@create')->name('company.create');
 Route::post('/companies', 'CompanyController@store')->name('company.submit');
+Route::get('/company/{id}', 'CompanyController@edit')->name('company.edit');
+Route::post('/company/edit/{id}', 'CompanyController@update')->name('company.update');
+Route::get('/company/delete/{id}', 'CompanyController@destroy')->name('company.delete');
+

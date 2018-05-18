@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-12">
             
             <div class="panel panel-default">
             	<div class="panle-heading" style="padding-left: 20px"><h4>Companies</h4>
@@ -46,16 +46,17 @@
                             </td>
                             <td>{!! $company->address !!}</td>
                             <td>{{$company->website}}</td>
-                            <td>{{$company->logo}}</td>
+                            <td><img alt="logo" height="30px" width="50px" src="{{asset('/storage/logos/'.$company->logo)}}"></td>
                             <td>{{$company->type}}</td>
                             <td>{{$company->license}}</td>
-                            <td> <a class="btn btn-default btn-sm">Edit</a> <br>
-                                <a class="btn btn-danger btn-sm">Delete</a>
+                            <td> <a class="btn btn-default btn-sm" href="{{route('company.edit', $company->id)}}">Edit</a> <br>
+                                <a class="btn btn-danger btn-sm" href="{{route('company.delete', $company->id)}}" onclick="return confirm('Confirm delete?')">Delete</a>
                             </td>
                           </tr>
                         @endforeach
                         </tbody>
                       </table>
+                     {!! $companies->render() !!}
             	</div>
             </div>
         </div>

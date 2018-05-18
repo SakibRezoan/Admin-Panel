@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Storage;
 use App\Company;
-
 class CompanyController extends Controller
 {
     // public function __construct()
@@ -19,7 +18,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
+        $companies = Company::paginate(2);
 
         if(count($companies) > 0){
             return view('company.show',['companies'=>$companies]);
@@ -83,7 +82,6 @@ class CompanyController extends Controller
         }
 
         $company->save();
-
         return redirect()->route('companies');
     }
 
@@ -106,7 +104,9 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $company = Company::where('id', $id)->first();
+            return view('company.edit',['company'=>$company]);
+
     }
 
     /**
@@ -118,7 +118,46 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+
+            'name' => 'string|required|max:255',
+            'email' => 'required|email|max:255',
+            'cmmi' => 'required|integer',
+            'branches' => 'required|array',
+            'branches.*' => 'required|string',
+            'address' => 'string|max:255',
+            'website' => 'string|max:255',
+            'type' => 'string',
+        ]);
+        $company = Company::find($id);
+        $company->name = $request->input('name');
+        $company->email = $request->input('email');
+        $company->cmmi = $request->input('cmmi');
+        $company->branches = $request->input('branches');
+        $company->address = $request->input('address');
+        $company->website = $request->input('website');
+        $company->type = $request->input('type');
+        
+        if($request->input('license'))
+            $company->license = true;
+        else
+            $company->license = false;
+
+        if($company->logo && $request->file('logo')){
+
+            unlink(storage_path('app/public/logos/'.$company->logo));
+
+            Storage::putFile('public/logos', $request->file('logo'));
+
+            $request->file('logo')->store('public/logos');
+
+            $file_name = $request->file('logo')->hashName();
+
+            $company->logo = $file_name;
+        }
+
+        $company->save();
+        return redirect()->route('companies');
     }
 
     /**
@@ -129,6 +168,15 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $companyInfo = Company::find($id);
+
+        $logo = $companyInfo->logo;
+        if($logo){
+            unlink(storage_path('app/public/logos/'.$logo));
+        }
+
+        $companyInfo->delete();
+
+        return redirect()->route('companies');
     }
 }
